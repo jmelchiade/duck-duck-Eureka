@@ -2,7 +2,7 @@ const { Client } = require("pg");
 
 const client = new Client({
   connectionString:
-    process.env.DATABASE_URL || "postgres://localhost:5432/GryffinBack",
+    process.env.DATABASE_URL || "postgres://localhost:5432/duck-duck-Eureka",
   ssl:
     process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }

@@ -46,7 +46,7 @@ async function createTables() {
       id SERIAL PRIMARY KEY,
       price INTEGER NOT NULL,
       description TEXT NOT NULL,
-      audience audience_type 
+      audience purchase_type 
     );
     CREATE TABLE cart(
       id SERIAL PRIMARY KEY,
