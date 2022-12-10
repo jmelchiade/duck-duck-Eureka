@@ -46,24 +46,39 @@ async function updateAddress({ id, ...fields }) {
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(", ");
-
+  if (setString.length === 0) {
+    return;
+  }
   try {
-    if (setString.length > 0) {
-      const {
-        rows: [address],
-      } = await client.query(
-        `
-            UPDATES address
+    const {
+      rows: [address],
+    } = await client.query(
+      `
+            UPDATE address
             SET ${setString}
             WHERE id=${id}
             RETURNING *;
             `,
-        Object.values(fields)
-      );
-      return address;
-    }
+      Object.values(fields)
+    );
+    return address;
   } catch (error) {
     throw error;
+  }
+}
+
+async function getAllAddresses() {
+  try {
+    const { rows: addressIds } = await client.query(`
+    SELECT id
+    FROM address
+    `);
+    const addresses = await Promise.all(
+      addressIds.map((address) => getAddressById(address.id))
+    );
+    return addresses;
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -71,4 +86,5 @@ module.exports = {
   createAddress,
   getAddressById,
   updateAddress,
+  getAllAddresses,
 };
